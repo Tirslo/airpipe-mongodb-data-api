@@ -1,0 +1,100 @@
+name: mongodb-data-api
+
+description: use any mongodb operation
+
+global:
+  databases:
+    main: 
+      driver: mongodb
+      conn_string: |
+        mongodb+srv://a|ap_var::MDB_USER|:a|ap_var::MDB_PASS|@a|ap_var::MDB_URL|
+
+interfaces:
+  # create
+  mongodb/create:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoCreate
+        database: main
+        document_operation:
+          database: 'a|body::database|'
+          collection: 'a|body::collection|'
+          operation: insertOne
+          filter: |
+                a|body::document|
+
+  # read
+  mongodb/read:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoRead
+        database: main
+        document_operation:
+          database: 'a|body::database|'
+          collection: 'a|body::collection|'
+          operation: findOne
+          filter: '{"name": "a|body::name|"}'
+
+  # update
+  mongodb/update:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoUpdate
+        database: main
+        document_operation:
+          database: 'a|body::database|'
+          collection: 'a|body::collection|'
+          operation: updateOne
+          filter: '{"name": "a|body::name|"}'
+          update: '{"$set": {"active": a|body::status|}}'
+ 
+  # delete
+  mongodb/delete:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoDelete
+        database: main
+        document_operation:
+          database: 'a|body::database|'
+          collection: 'a|body::collection|'
+          operation: deleteOne
+          filter: '{"name": "a|body::name|"}'
+
+
+  # aggregate
+  mongodb/aggregate:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoAggregate
+        database: main
+        document_operation:
+          database: 'a|body::database|'
+          collection: 'a|body::collection|'
+          operation: aggregate
+          pipeline: |
+            [ {
+                "$match": {
+                  "username": { "$regex": "^a|CheckBody::starts_with|", "$options": "i" }
+                }
+              },
+              {
+                "$project": {
+                  "_id": 1,
+                  "username": 1,
+                  "email": 1
+                }
+              },
+              {
+               "$limit": 30
+              }
+            ]

@@ -1,0 +1,32 @@
+[
+  {
+    "database": "data-api",
+    "collection": "data",
+    "document": {
+      "name": "random",
+      "job": "solution architect",
+      "status": false
+    }
+  },
+  {
+    "database": "data-api",
+    "collection": "data",
+    "name": "random"
+  },
+  {
+    "database": "data-api",
+    "collection": "data",
+    "name": "random",
+    "status": true
+  },
+  {
+    "database": "data-api",
+    "collection": "data",
+    "name": "random",
+    "status": true
+  },
+  {
+    "database": "sample_analytics",
+    "collection": "customers"
+  }
+]
