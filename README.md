@@ -15,23 +15,75 @@ Air Pipe provides a flexible, cloud-agnostic platform that can replicate MongoDB
 - **HTTP API Ready**: Instant REST API endpoints
 - **Secure**: Built-in authentication and connection management
 
-## Supported MongoDB Operations
+## Prerequisites
 
-This configuration supports all essential MongoDB operations:
+Before setting up this MongoDB Data API replacement, you'll need to complete the following prerequisites:
 
-### CRUD Operations
-- `insertOne` - Create single document
-- `findOne` - Read single document
-- `updateOne` - Update single document
-- `deleteOne` - Delete single document
-- `insertMany` - Create multiple documents
-- `updateMany` - Update multiple documents
-- `deleteMany` - Delete multiple documents
+### 1. MongoDB Atlas Database Setup
 
-### Advanced Operations
-- `findOneAndDelete` - Find and delete in one operation
-- `findOneAndReplace` - Find and replace in one operation
-- `aggregate` - Complex aggregation pipelines
+#### Creating a MongoDB Atlas Database
+
+1. **Sign Up for MongoDB Atlas**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+   - Create a free account or sign in
+
+2. **Create a New Cluster**
+   - Click "Create a New Cluster"
+   - Choose the free tier (M0 Sandbox)
+   - Select your preferred cloud provider and region
+   - Click "Create Cluster"
+
+3. **Configure Database Access**
+   - Go to "Database Access" in the left sidebar
+   - Click "Add New Database User"
+   - Choose "Password" authentication
+   - Create a username and strong password
+   - Set user privileges to "Read and write to any database"
+   - Click "Add User"
+
+4. **Configure Network Access**
+   - Go to "Network Access" in the left sidebar
+   - Click "Add IP Address"
+   - For development, you can click "Allow Access from Anywhere" (0.0.0.0/0)
+   - For production, add specific IP addresses
+   - Click "Confirm"
+
+5. **Get Connection String**
+   - Go to "Clusters" and click "Connect"
+   - Choose "Connect your application"
+   - Copy the connection string
+   - Replace `<password>` with your database user password
+
+#### Loading Sample Dataset
+
+1. **Load MongoDB Sample Dataset**
+   - In your Atlas cluster, click the "..." (ellipsis) button
+   - Select "Load Sample Dataset"
+   - Click "Load Sample Dataset" and wait for completion
+   - This loads several sample databases including `sample_analytics`
+
+2. **Create Custom Database (Optional)**
+   - In your cluster, click "Collections"
+   - Click "Create Database"
+   - Database name: `data-api`
+   - Collection name: `data`
+   - Click "Create"
+   
+   **Note**: MongoDB automatically creates databases and collections when you first insert data into them. You can skip this step if you prefer, as the first create operation will automatically create both the `data-api` database and `data` collection. However, creating them manually helps with organization and testing.
+
+### 2. Air Pipe Account Setup
+
+1. **Create Air Pipe Account**
+   - Go to [Air Pipe SaaS Platform](https://app.airpipe.io/)
+   - Sign up for a new account or sign in to your existing account
+   - Complete the account setup process
+
+2. **Set Up Environment Variables**
+   
+   In your Air Pipe application, configure the following environment variables (using the credentials and connection string from your MongoDB Atlas setup above):
+   - `MDB_USER`: Your MongoDB username (from step 3 above)
+   - `MDB_PASS`: Your MongoDB password (from step 3 above)
+   - `MDB_URL`: Your MongoDB cluster URL without credentials (from step 5 above)
 
 ## Configuration Breakdown
 
@@ -189,18 +241,10 @@ mongodb/aggregate:
 
 ## Setup Instructions
 
-### 1. Environment Variables
-
-Set up the following environment variables in your Air Pipe application:
-
-- `MDB_USER`: Your MongoDB username
-- `MDB_PASS`: Your MongoDB password
-- `MDB_URL`: Your MongoDB cluster URL (without credentials)
-
-### 2. Deploy Configuration
+### 1. Deploy Configuration
 
 1. Copy the configuration to your Air Pipe project
-2. Configure your environment variables
+2. Ensure your environment variables are configured (from Prerequisites)
 3. Deploy to Air Pipe SaaS or your preferred environment
 
 ### Complete Test Workflow
@@ -268,57 +312,21 @@ curl -X POST https://your-air-pipe-endpoint/mongodb/aggregate \
   }'
 ```
 
-### 3. MongoDB Atlas Setup
+This configuration supports all essential MongoDB operations:
 
-#### Creating a MongoDB Atlas Database
+### CRUD Operations
+- `insertOne` - Create single document
+- `findOne` - Read single document
+- `updateOne` - Update single document
+- `deleteOne` - Delete single document
+- `insertMany` - Create multiple documents
+- `updateMany` - Update multiple documents
+- `deleteMany` - Delete multiple documents
 
-1. **Sign Up for MongoDB Atlas**
-   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   - Create a free account or sign in
-
-2. **Create a New Cluster**
-   - Click "Create a New Cluster"
-   - Choose the free tier (M0 Sandbox)
-   - Select your preferred cloud provider and region
-   - Click "Create Cluster"
-
-3. **Configure Database Access**
-   - Go to "Database Access" in the left sidebar
-   - Click "Add New Database User"
-   - Choose "Password" authentication
-   - Create a username and strong password
-   - Set user privileges to "Read and write to any database"
-   - Click "Add User"
-
-4. **Configure Network Access**
-   - Go to "Network Access" in the left sidebar
-   - Click "Add IP Address"
-   - For development, you can click "Allow Access from Anywhere" (0.0.0.0/0)
-   - For production, add specific IP addresses
-   - Click "Confirm"
-
-5. **Get Connection String**
-   - Go to "Clusters" and click "Connect"
-   - Choose "Connect your application"
-   - Copy the connection string
-   - Replace `<password>` with your database user password
-
-#### Loading Sample Dataset
-
-1. **Load MongoDB Sample Dataset**
-   - In your Atlas cluster, click the "..." (ellipsis) button
-   - Select "Load Sample Dataset"
-   - Click "Load Sample Dataset" and wait for completion
-   - This loads several sample databases including `sample_analytics`
-
-2. **Create Custom Database (Optional)**
-   - In your cluster, click "Collections"
-   - Click "Create Database"
-   - Database name: `data-api`
-   - Collection name: `data`
-   - Click "Create"
-   
-   **Note**: MongoDB automatically creates databases and collections when you first insert data into them. You can skip this step if you prefer, as the first create operation will automatically create both the `data-api` database and `data` collection. However, creating them manually helps with organization and testing.
+### Advanced Operations
+- `findOneAndDelete` - Find and delete in one operation
+- `findOneAndReplace` - Find and replace in one operation
+- `aggregate` - Complex aggregation pipelines
 
 ### 4. Sample Data and API Usage Examples
 
@@ -434,7 +442,7 @@ If you're migrating from MongoDB Data API, the HTTP request structure remains si
 }
 ```
 
-### AirPipe Format
+### Air Pipe Format
 ```json
 {
   "database": "myapp",
@@ -445,14 +453,14 @@ If you're migrating from MongoDB Data API, the HTTP request structure remains si
 
 ## Additional Resources
 
-- [AirPipe Documentation](https://docs.airpipe.io/)
-- [AirPipe SaaS Platform](https://airpipe.io/)
+- [Air Pipe Documentation](https://docs.airpipe.io/)
+- [Air Pipe SaaS Platform](https://airpipe.io/)
 - [MongoDB Connection String Format](https://docs.mongodb.com/manual/reference/connection-string/)
 
 ## Support
 
-For AirPipe-specific questions, refer to their documentation or support channels. For MongoDB-related questions, consult the official MongoDB documentation.
+For Air Pipe-specific questions, refer to their documentation or support channels. For MongoDB-related questions, consult the official MongoDB documentation.
 
 ## License
 
-This configuration is provided as-is for educational and development purposes. Ensure you comply with AirPipe's terms of service and MongoDB's licensing requirements.
+This configuration is provided as-is for educational and development purposes. Ensure you comply with Air Pipe's terms of service and MongoDB's licensing requirements.
