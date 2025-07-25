@@ -3,6 +3,9 @@ name: mongodb-data-api
 description: use any mongodb operation
 
 global:
+  variables:
+    MDB_DB: 'data-api'
+    MDB_COL: 'data'
   databases:
     main: 
       driver: mongodb
@@ -19,8 +22,8 @@ interfaces:
       - name: MongoCreate
         database: main
         document_operation:
-          database: 'a|body::database|'
-          collection: 'a|body::collection|'
+          database: 'a|var::MDB_DB|'
+          collection: 'a|var::MDB_COL|'
           operation: insertOne
           filter: |
                 a|body::document|
@@ -34,8 +37,8 @@ interfaces:
       - name: MongoRead
         database: main
         document_operation:
-          database: 'a|body::database|'
-          collection: 'a|body::collection|'
+          database: 'a|var::MDB_DB|'
+          collection: 'a|var::MDB_COL|'
           operation: findOne
           filter: '{"name": "a|body::name|"}'
 
@@ -48,8 +51,8 @@ interfaces:
       - name: MongoUpdate
         database: main
         document_operation:
-          database: 'a|body::database|'
-          collection: 'a|body::collection|'
+          database: 'a|var::MDB_DB|'
+          collection: 'a|var::MDB_COL|'
           operation: updateOne
           filter: '{"name": "a|body::name|"}'
           update: '{"$set": {"active": a|body::status|}}'
@@ -63,8 +66,8 @@ interfaces:
       - name: MongoDelete
         database: main
         document_operation:
-          database: 'a|body::database|'
-          collection: 'a|body::collection|'
+          database: 'a|var::MDB_DB|'
+          collection: 'a|var::MDB_COL|'
           operation: deleteOne
           filter: '{"name": "a|body::name|"}'
 
@@ -78,7 +81,7 @@ interfaces:
       - name: MongoAggregate
         database: main
         document_operation:
-          database: 'a|body::database|'
+          database: 'a|var::MDB_DB|'
           collection: 'a|body::collection|'
           operation: aggregate
           pipeline: |
