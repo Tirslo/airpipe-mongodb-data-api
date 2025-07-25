@@ -14,6 +14,10 @@ Air Pipe provides a flexible, cloud-agnostic platform that can replicate MongoDB
 - **Aggregation Pipeline Support**: Full MongoDB aggregation capabilities
 - **HTTP API Ready**: Instant REST API endpoints
 - **Secure**: Built-in authentication and connection management
+- **Testing**: Built-in testing for your API's 
+- **Visual Editor**: Built-in Visual Editor for you API's
+
+![Visuals](images/visualeditor.png)
 
 ## Prerequisities 
 
@@ -319,147 +323,9 @@ Once your Air Pipe configuration is deployed and your MongoDB Atlas database is 
 
 #### Testing Sequence Example
 
-```bash
-# 1. Create document
-curl -X POST https://your-air-pipe-endpoint/mongodb/create \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "document": {
-      "name": "random",
-      "job": "solution architect",
-      "status": false
-    }
-  }'
+Use Air Pipe's API Tester or curl the API URL
 
-# 2. Read document
-curl -X POST https://your-air-pipe-endpoint/mongodb/read \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random"
-  }'
-
-# 3. Update document
-curl -X POST https://your-air-pipe-endpoint/mongodb/update \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random",
-    "status": true
-  }'
-
-# 4. Delete document
-curl -X POST https://your-air-pipe-endpoint/mongodb/delete \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random"
-  }'
-
-# 5. Test aggregation with sample data
-curl -X POST https://your-air-pipe-endpoint/mongodb/aggregate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "sample_analytics",
-    "collection": "customers",
-    "starts_with": "John"
-  }'
-```
-
-This configuration supports all essential MongoDB operations:
-
-### CRUD Operations
-- `insertOne` - Create single document
-- `findOne` - Read single document
-- `updateOne` - Update single document
-- `deleteOne` - Delete single document
-- `insertMany` - Create multiple documents
-- `updateMany` - Update multiple documents
-- `deleteMany` - Delete multiple documents
-
-### Advanced Operations
-- `findOneAndDelete` - Find and delete in one operation
-- `findOneAndReplace` - Find and replace in one operation
-- `aggregate` - Complex aggregation pipelines
-
-### 4. Sample Data and API Usage Examples
-
-#### Sample Data Structure
-
-The following examples use sample data that you can test with:
-
-```json
-{
-  "name": "random",
-  "job": "solution architect",
-  "status": false
-}
-```
-
-#### Create Document
-```bash
-curl -X POST https://your-air-pipe-endpoint/mongodb/create \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "document": {
-      "name": "random",
-      "job": "solution architect",
-      "status": false
-    }
-  }'
-```
-
-#### Read Document
-```bash
-curl -X POST https://your-air-pipe-endpoint/mongodb/read \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random"
-  }'
-```
-
-#### Update Document
-```bash
-curl -X POST https://your-air-pipe-endpoint/mongodb/update \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random",
-    "status": true
-  }'
-```
-
-#### Delete Document
-```bash
-curl -X POST https://your-air-pipe-endpoint/mongodb/delete \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "data-api",
-    "collection": "data",
-    "name": "random"
-  }'
-```
-
-#### Aggregate Documents (Using MongoDB Sample Dataset)
-```bash
-curl -X POST https://your-air-pipe-endpoint/mongodb/aggregate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "database": "sample_analytics",
-    "collection": "customers",
-    "starts_with": "John"
-  }'
-```
+![Testing](images/testing.png)
 
 
 ## Additional Resources
