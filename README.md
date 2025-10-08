@@ -16,64 +16,32 @@ Air Pipe provides a flexible, cloud-agnostic platform that can replicate MongoDB
 - **Secure**: Built-in authentication and connection management
 - **Testing**: Built-in testing for your API's 
 - **Visual Editor**: Built-in Visual Editor for you API's
+- **Traces**: Built-in config tracing for your API's
 
 ![Visuals](images/visualeditor.png)
 
 ## Prerequisities 
 
-Before setting up this MongoDB Data API replacement, you'll need to complete the following: 
+Before setting up this MongoDB Data API replacement, you'll need to complete the following:
 
-### 1. MongoDB Atlas Database Setup
 
-#### Creating a MongoDB Atlas Database
+### MongoDB Atlas Setup: Quick Guide
 
-1. **Sign Up for MongoDB Atlas**
-   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   - Create a free account or sign in
+1.  **Create a Free Cluster**
+    * Sign up or log in to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+    * Create a new cluster, selecting the free **M0 Sandbox** tier.
 
-2. **Create a New Cluster**
-   - Click "Create a New Cluster"
-   - Choose the free tier (M0 Sandbox)
-   - Select your preferred cloud provider and region
-   - Click "Create Cluster"
+2.  **Configure Access**
+    * **Database Access**: Add a new database user with a secure password and "Read and write to any database" privileges.
+    * **Network Access**: Click "Add IP Address" and select "Allow Access from Anywhere" (`0.0.0.0/0`) for development purposes.
 
-3. **Configure Database Access**
-   - Go to "Database Access" in the left sidebar
-   - Click "Add New Database User"
-   - Choose "Password" authentication
-   - Create a username and strong password
-   - Set user privileges to "Read and write to any database"
-   - Click "Add User"
+3.  **Get Your Connection String**
+    * In your cluster view, click **Connect** -> **Connect your application**.
+    * Copy the connection string and replace `<password>` with the password you created in the previous step.
 
-4. **Configure Network Access**
-   - Go to "Network Access" in the left sidebar
-   - Click "Add IP Address"
-   - For development, you can click "Allow Access from Anywhere" (0.0.0.0/0)
-   - For production, add specific IP addresses
-   - Click "Confirm"
-
-5. **Get Connection String**
-   - Go to "Clusters" and click "Connect"
-   - Choose "Connect your application"
-   - Copy the connection string
-   - Replace `<password>` with your database user password
-
-#### Loading Sample Dataset
-
-1. **Load MongoDB Sample Dataset**
-   - In your Atlas cluster, click the "..." (ellipsis) button
-   - Select "Load Sample Dataset"
-   - Click "Load Sample Dataset" and wait for completion
-   - This loads several sample databases including `sample_analytics`
-
-2. **Create Custom Database (Optional)**
-   - In your cluster, click "Collections"
-   - Click "Create Database"
-   - Database name: `data-api`
-   - Collection name: `data`
-   - Click "Create"
-   
-   **Note**: MongoDB automatically creates databases and collections when you first insert data into them. You can skip this step if you prefer, as the first create operation will automatically create both the `data-api` database and `data` collection. However, creating them manually helps with organization and testing.
+4.  **Load Data (Optional)**
+    * **Sample Data**: Click the `...` menu on your cluster and select **Load Sample Dataset**.
+    * **Custom Database**: A database and collection (e.g., `data-api.data`) will be created automatically the first time you insert data. You can also create them manually under the **Collections** tab.
 
 
 ### 2. Air Pipe Account Setup
@@ -117,7 +85,7 @@ Air Pipe uses a specific syntax for dynamic values:
 - `a|ap_var::VARIABLE_NAME|` - Secrets
 - `a|body::FIELD_NAME|` - Request body fields
 
-| Note ypu can adjust this configuration in a range of ways including using variables, secrets, handling more complex backend logic see [Air Pipe Docs](https://docs.airpipe.io/docs/configuration) for configuration options, examples and tutorials
+| Note ypu can adjust this configuration in a range of ways including using variables, secrets or handling more complex backend logic see [Air Pipe Docs](https://docs.airpipe.io/docs/configuration) for configuration options, examples and tutorials
 
 ## Configuration Breakdown
 
@@ -151,32 +119,6 @@ Each interface creates a HTTP endpoint that performs specific MongoDB operations
     output: http
 
     actions:
-      - name: MongoInsert
-        database: main
-        document_operation:
-          database: 'data-api'
-          collection: 'data'
-          operation: insertOne
-          insert: |
-                a|body::document|
-```
-
-- **method**: HTTP POST method for creating data
-- **output**: Returns HTTP response
-- **database**: References the 'main' database connection
-- **document_operation**: Defines the MongoDB operation
-  - `operation`: Uses MongoDB's `insertOne` method
-  - `filter`: The document to insert (from request body)
-
-
-#### 2. Read Operation (POST /mongodb/read)
-
-```yaml
-  mongodb/insert:
-    method: POST
-    output: http
-
-    actions:
       - name: MongoCreate
         database: main
         document_operation:
@@ -201,9 +143,13 @@ Each interface creates a HTTP endpoint that performs specific MongoDB operations
                 a|body::docs|
 ```
 
-- **operation**: Uses MongoDB's `findOne` method
-- **filter**: Query filter using the 'name' field from request body
-- Finds a single document matching the specified name
+- **method**: HTTP POST method for creating data
+- **output**: Returns HTTP response
+- **database**: References the 'main' database connection
+- **document_operation**: Defines the MongoDB operation
+  - `operation`: Uses MongoDB's `insertOne` method
+  - `filter`: The document to insert (from request body)
+
 
 #### 2. Read Operation (POST /mongodb/read)
 
@@ -263,7 +209,7 @@ Each interface creates a HTTP endpoint that performs specific MongoDB operations
           database: 'data-api'
           collection: 'data'
           operation: deleteOne
-          filter: '{"name": "a|body::name|"}'
+          delete: '{"name": "a|body::name|"}'
 ```
 
 - **operation**: Uses MongoDB's `deleteOne` method

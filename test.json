@@ -23,7 +23,7 @@
     "database": "data-api",
     "collection": "data",
     "name": "random",
-    "status": true
+    "status": false
   },
   {
     "database": "sample_analytics",

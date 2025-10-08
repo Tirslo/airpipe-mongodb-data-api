@@ -3,9 +3,6 @@ name: mongodb-data-api
 description: use any mongodb operation
 
 global:
-  variables:
-    MDB_DB: 'data-api'
-    MDB_COL: 'data'
   databases:
     main: 
       driver: mongodb
@@ -19,14 +16,37 @@ interfaces:
     output: http
 
     actions:
+      - name: CheckBody
+        input: a|body
+        assert:
+          tests:
+            - value: document
+              is_not_null: true
+              
       - name: MongoCreate
+        run_when_succeeded:
+          - previous
         database: main
         document_operation:
-          database: 'a|var::MDB_DB|'
-          collection: 'a|var::MDB_COL|'
+          database: 'data-api'
+          collection: 'data'
           operation: insertOne
-          filter: |
-                a|body::document|
+          insert: |
+                a|CheckBody::document|
+
+  mongodb/insert-many:
+    method: POST
+    output: http
+
+    actions:
+      - name: MongoInsertMany
+        database: main
+        document_operation:
+          database: 'steam'
+          collection: 'games'
+          operation: insertMany
+          insert: |
+                a|body::docs|
 
   # read
   mongodb/read:
@@ -37,8 +57,8 @@ interfaces:
       - name: MongoRead
         database: main
         document_operation:
-          database: 'a|var::MDB_DB|'
-          collection: 'a|var::MDB_COL|'
+          database: 'data-api'
+          collection: 'data'
           operation: findOne
           filter: '{"name": "a|body::name|"}'
 
@@ -51,8 +71,8 @@ interfaces:
       - name: MongoUpdate
         database: main
         document_operation:
-          database: 'a|var::MDB_DB|'
-          collection: 'a|var::MDB_COL|'
+          database: 'data-api'
+          collection: 'data'
           operation: updateOne
           filter: '{"name": "a|body::name|"}'
           update: '{"$set": {"active": a|body::status|}}'
@@ -66,8 +86,8 @@ interfaces:
       - name: MongoDelete
         database: main
         document_operation:
-          database: 'a|var::MDB_DB|'
-          collection: 'a|var::MDB_COL|'
+          database: 'data-api'
+          collection: 'data'
           operation: deleteOne
           filter: '{"name": "a|body::name|"}'
 
@@ -81,8 +101,8 @@ interfaces:
       - name: MongoAggregate
         database: main
         document_operation:
-          database: 'a|var::MDB_DB|'
-          collection: 'a|body::collection|'
+          database: 'sample-analytics'
+          collection: 'customers'
           operation: aggregate
           pipeline: |
             [ {
