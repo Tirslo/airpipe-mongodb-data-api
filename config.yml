@@ -11,7 +11,7 @@ global:
 
 interfaces:
   # create
-  mongodb/create:
+  mongodb/insert:
     method: POST
     output: http
 
