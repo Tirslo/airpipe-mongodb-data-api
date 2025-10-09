@@ -60,7 +60,7 @@ interfaces:
           database: 'data-api'
           collection: 'data'
           operation: findOne
-          filter: '{"name": "a|body::name|"}'
+          filter: a|body::document|
 
   # update
   mongodb/update:
@@ -89,7 +89,8 @@ interfaces:
           database: 'data-api'
           collection: 'data'
           operation: deleteOne
-          filter: '{"name": "a|body::name|"}'
+          delete: | 
+                a|body::document|
 
 
   # aggregate
